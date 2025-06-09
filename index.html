@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Universal Position Size Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f2f2f2; }
+    h2 { color: #333; }
+    input { padding: 8px; margin: 5px 0; width: 100%; }
+    button { padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; width: 100%; }
+    button:hover { background-color: #45a049; }
+    .result { margin-top: 20px; font-size: 1.2em; color: #222; }
+  </style>
+</head>
+<body>
+  <h2>Universal Position Size Calculator (Fahad)</h2>
+
+  <label>Account Balance (USD):</label>
+  <input type="number" id="balance" placeholder="e.g. 103.99" />
+
+  <label>Risk % (of Balance):</label>
+  <input type="number" id="riskPercent" placeholder="e.g. 100" />
+
+  <label>Stop Loss (Pips):</label>
+  <input type="number" id="stopLoss" placeholder="e.g. 35" />
+
+  <label>Account Leverage:</label>
+  <input type="number" id="leverage" placeholder="e.g. 500" />
+
+  <label>Pair (Type Manually e.g. GBPUSD, USDJPY, GBPCAD):</label>
+  <input type="text" id="pair" placeholder="e.g. GBPUSD" />
+
+  <button onclick="calculateLotSize()">Calculate Lot Size</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculateLotSize() {
+      const balance = parseFloat(document.getElementById('balance').value);
+      const riskPercent = parseFloat(document.getElementById('riskPercent').value);
+      const stopLoss = parseFloat(document.getElementById('stopLoss').value);
+      const leverage = parseFloat(document.getElementById('leverage').value);
+      const pair = document.getElementById('pair').value.trim().toUpperCase();
+
+      if (!balance || !riskPercent || !stopLoss || !leverage || !pair) {
+        document.getElementById('result').innerText = 'Please fill all fields properly.';
+        return;
+      }
+
+      const pipValue = pair.endsWith('JPY') ? 0.01 : 0.0001;
+      const riskAmount = (riskPercent / 100) * balance;
+      const lotSize = (riskAmount / (stopLoss * pipValue * 100000));
+
+      document.getElementById('result').innerText =
+        `Safe Lot Size: ${lotSize.toFixed(2)} lots (for ${pair})`;
+    }
+  </script>
+</body>
+</html>
